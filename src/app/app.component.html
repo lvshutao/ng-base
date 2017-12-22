@@ -1,0 +1,34 @@
+<div class="wrapper">
+
+  <app-header></app-header>
+
+  <!-- =============================================== -->
+
+  <!-- Left side column. contains the sidebar -->
+  <app-aside></app-aside>
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <app-content-header></app-content-header>
+
+    <!-- Main content -->
+    <section class="content">
+      <router-outlet></router-outlet>
+      <router-outlet name="index"></router-outlet>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <app-footer></app-footer>
+
+  <!-- Control Sidebar -->
+  <app-aside-right></app-aside-right>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>

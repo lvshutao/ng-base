@@ -1,0 +1,18 @@
+<h4>守卫路由</h4>
+
+<p class="help-block">Resolve:在路由激活之前，获取数据</p>
+<div>
+  <a [routerLink]="['pro-resolve']" [queryParams]="{id:1}" class="btn btn-info">Resolve</a>
+</div>
+
+<p class="help-block">CanActivate:处理导航到某路由的情况，通常用于要求用户验证</p>
+<div>
+  <a routerLink="pro-can-activate" class="btn btn-success">CanActivate</a>
+</div>
+
+<p class="help-block">CanDeactivate:处理从当前路由离开的情况</p>
+<div>
+  <a routerLink="pro-can-deactivate" class="btn btn-warning">CanDeactivate</a>
+</div>
+<hr>
+<router-outlet></router-outlet>

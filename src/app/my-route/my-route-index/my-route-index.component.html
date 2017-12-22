@@ -1,0 +1,63 @@
+<h4>路由</h4>
+
+<p class="help-block">这里使用了特性路由，相关的文件在</p>
+<ul>
+  <li>src/app/my-route/my-route.routes.ts 特性路由的路由文件</li>
+  <li>src/app/my-route/my-route.module.ts 特性路由所在的模块</li>
+  <li>src/app/routes.ts 根路由配置文件(400)</li>
+  <li>src/app/app.module.ts 根模块</li>
+</ul>
+
+<a [routerLink]="['query']" class="btn btn-warning">(链接)创建</a>
+<a (click)="goDetail()" class="btn btn-warning">(按钮)创建</a>
+
+<h5>传递数据</h5>
+<p>需要注意: 参数快照 和 参数订阅 (好像现在已经没有这个问题了)</p>
+<div class="help-block">
+  一.在查询参数中传递数据
+  <a class="btn btn-primary btn-xs"
+     [routerLink]="['query']" [queryParams]="{id:1,name:'aa'}">试一试</a>
+  <a class="btn btn-primary btn-xs"
+     [routerLink]="['query']" [queryParams]="{id:2,name:'bb'}">试一试</a>
+</div>
+
+
+<div class="help-block">二.在路由路径中传递数据
+  <a class="btn btn-primary btn-xs" [routerLink]="['detail',2,'科比']">试一试</a>
+  <a class="btn btn-primary btn-xs" [routerLink]="['detail',3,'麦迪']">试一试</a>
+  <p>1. 修改 my-route.routes.ts 中的路由配置为 `detail/:id/:name` 允许携带参数</p>
+  <p>2. 修改链接地址 `['detail',1,'nameHere']`</p>
+</div>
+
+<div class="help-block">三.在路由配置中直接传递数据(常量)
+  <a [routerLink]="['const']" class="btn btn-primary btn-xs">试一试</a>
+</div>
+
+<h4>疑问</h4>
+<ol>
+  <li>当前页面是否还可以继续放置插座？&lt;router-outlet&gt;&lt;/router-outlet&gt;
+    如果可以，如何控制只在当前页面的插座上显示内容，而不是在总插座上？
+    <p class="help-block">答案: 可以，这里使用到的是子路由</p>
+  </li>
+  <li>什么时候使用 `[routerLink]`? 什么时候使用 `routerLink`</li>
+  <li>routerLinkActive="active" 要跟着 routerLink 走？</li>
+</ol>
+
+<h4>子路由</h4>
+<!--子路由是不可以以 / 开头，只能以 ./ 开头-->
+<a [routerLink]="['./child']" class="btn btn-success btn-xs">子路由页面1</a>
+<a [routerLink]="['./child2']" class="btn btn-success btn-xs">子路由页面2</a>
+<router-outlet></router-outlet>
+
+<h4>辅助路由</h4>
+<ol>
+  <li>在 app.component.html 中定义辅助插座</li>
+  <li>为 辅助插座 专门创建一个组件</li>
+  <li>在路由中绑定 组件 和 辅助插座</li>
+</ol>
+<a [routerLink]="[{outlets:{index:'aux'}}]" class="btn btn-info">开始咨询</a>
+<!--
+<a [routerLink]="[{outlets:{primary:'/home',index:'aux'}}]" class="btn btn-info">
+指定主路由</a>
+-->
+<a [routerLink]="[{outlets:{index:null}}]" class="btn btn-info">结束咨询</a>
