@@ -12,7 +12,7 @@
       </div>
     </div>
     <!-- search form -->
-    <form action="#" method="get" class="sidebar-form">
+    <form  method="get" class="sidebar-form">
       <div class="input-group">
         <input type="text" name="q" class="form-control" placeholder="Search...">
         <span class="input-group-btn">
@@ -24,11 +24,16 @@
     <!-- /.search form -->
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
-      <li class="header">路由</li>
-      <li><a routerLink="my-route" routerLinkActive="active"
-        ><i class="fa fa-circle-o text-red"></i> <span>路由(特性模块)</span></a></li>
-      <li><a routerLink="pro-route" routerLinkActive="active"
-        ><i class="fa fa-circle-o text-green"></i> <span>路由守卫</span></a></li>
+      <li class="header">主要内容</li>
+      <li *ngFor="let menu of menus">
+        <!--<a routerLink="{{ menu.link }}" routerLinkActive="active">-->
+          <!--<i class="fa fa-circle-o {{ menu?.textColor}}"></i> <span>{{ menu.name }}</span>-->
+        <!--</a>-->
+        <!-- 下面这种方法的缺点是：刷新页面(进入页面)后，因为还没有选中任务菜单，所以高亮显示会错误 -->
+        <a href="javascript:;" (click)="nav(menu)" [class.active]="currentMenu.id == menu.id">
+          <i class="fa fa-circle-o {{ menu?.textColor}}"></i> <span>{{ menu.name }}</span>
+        </a>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

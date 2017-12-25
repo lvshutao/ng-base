@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {PageInfoService} from '../../share/page-info.service';
 
 @Component({
   selector: 'app-content-header',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentHeaderComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(public pageInfo: PageInfoService) {
+
+  }
 
   ngOnInit() {
   }

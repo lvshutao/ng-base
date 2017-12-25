@@ -1,0 +1,61 @@
+<h4>通过 @Input/@Output 实现交互</h4>
+<ol>
+  <li>接收事件的参数，只能写 $event</li>
+</ol>
+<div class="box box-info">
+  <!-- form start -->
+  <form class="form-horizontal">
+    <div class="box-body">
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">星级</label>
+
+        <div class="col-sm-10">
+          <!--注意这里有一个 ？号-->
+          <!--注意，这里只能写 $event-->
+          <app-my-form-rate
+            [rating]="teacher?.rate"
+            (onSelectRate)="onRating($event)"
+          ></app-my-form-rate>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="submit" class="btn btn-default" (click)="cancel()">取消</button>
+      <button type="submit" class="btn btn-info pull-right" (click)="save()">保存</button>
+    </div>
+    <!-- /.box-footer -->
+  </form>
+  <div>{{ teacher | json }}</div>
+</div>
+
+
+<h4>全局服务模式</h4>
+<p class="help-block">特点:全站共享</p>
+<div>src/app/share/page-info.service.ts</div>
+<div>src/app/app.module.ts 工厂方法</div>
+
+<h4>中间人模式</h4>
+<div>通过提取最近的父组件，也是采用 @Input() 和 @Output 实现</div>
+<div>
+  <pre>
+&lt;input [(ngModel)]="search"&gt;
+
+&lt;app-stock-search [keyword]="search" (addCard)="addCardHandler($event)"&gt;
+&lt;/app-stock-search&gt;
+
+&lt;app-stock-cart [stockInfo]="stockInfo"&gt;
+&lt;/app-stock-cart&gt;
+
+//js
+addCardHandler(stock:Stock){{ '{' }}
+    this.stockInfo = stock;
+{{'}'}}  </pre>
+</div>
+<div>官方示例：<a href="https://angular.cn/guide/component-interaction#父组件和子组件通过服务来通讯" target="_blank">
+  父组件和子组件通过服务来通讯:new Subject().asObservable()
+</a></div>
+
+<h4>服务注入</h4>

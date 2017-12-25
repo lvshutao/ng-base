@@ -1,0 +1,59 @@
+<div class="box">
+  <div class="box-header with-border">
+    <h3 class="box-title">优秀教师</h3>
+
+    <div class="box-tools">
+      <div class="input-group input-group-sm" style="width: 150px;">
+        <input type="text" [formControl]="searchFilter"
+               class="form-control pull-right" placeholder="延迟 1s 搜索">
+
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <table class="table table-bordered table-striped">
+      <tr>
+        <th style="width: 10px">#</th>
+        <th>姓名</th>
+        <th>科目</th>
+        <th>星级</th>
+        <th>操作</th>
+      </tr>
+      <tr *ngFor="let teacher of teachers;let i = index;">
+        <td>{{ i + 1}}.</td>
+        <td>{{ teacher.name }}</td>
+        <td>{{ teacher.subject | json }}</td>
+        <td>
+          <app-my-form-rate [rating]="teacher?.rate" [readonly]="true"></app-my-form-rate>
+        </td>
+        <td>
+          <button class="btn btn-primary btn-xs" (click)="onEdit(teacher)">
+            <i class="glyphicon glyphicon-pencil"></i> 编辑
+          </button>
+          <button class="btn btn-danger btn-xs" (click)="onDelete(teacher)">
+            <i class="glyphicon glyphicon-minus"></i> 删除
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<h4>知识点</h4>
+<ol>
+  <li>响应式编程 —— 右上角的搜索</li>
+  <li><a [routerLink]="['/teacher-detail',0]" class="btn btn-xs btn-primary">
+    <i class="glyphicon glyphicon-retweet"></i> 组件交互</a> —— 编辑:星级
+  </li>
+  <li>验证器:min, max, required, requiredTrue, email, minLength, maxLength, pattern, nullValidator, compose, composeAsync</li>
+</ol>
+<div>
+  <a routerLink="tpl" routerLinkActive="btn-success"
+     class="btn btn-default btn-xs"><i class="glyphicon glyphicon-plus"></i> 模板驱动表单</a>
+  <a routerLink="reactive" routerLinkActive="btn-success"
+     class="btn btn-default btn-xs"><i class="glyphicon glyphicon-plus"></i> 响应式表单</a>
+</div>
+<router-outlet></router-outlet>

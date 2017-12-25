@@ -1,0 +1,232 @@
+<div class="help-block">
+  <div>导入 NgModules</div>
+  <div>在模板中使用 NgForm -> FormGroup, NgModel -> FormControl, NgModelGroup -> FormGroup 指令</div>
+  <div>button[type=button] 阻止默认的 submit</div>
+  <div>使用 novalidate 来阻止表单默认提交</div>
+  <div>src/app/my-form/my-form-tpl/directive 目录下包含了各种(异步)验证器</div>
+</div>
+
+<!-- Horizontal Form -->
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">模板驱动表单</h3>
+  </div>
+  <!-- /.box-header -->
+  <!-- form start -->
+  <!--1. (可选)将 ngForm 绑定到 form 中 或者 使用一个模板变量来绑定它(之后可以显示表单的值) -->
+  <!--2. (可选)使用 ngModel + name ，那么控件将会被添加到表单值中-->
+  <!-- 如果你直接使用 [(ngModel)] 双向绑定，并且不想调试表单的值，那么上面的步骤都不需要 -->
+  <!--3. 使用 ngSubmit 来替换默认的提交事件 -->
+  <form class="form-horizontal" novalidate #myForm="ngForm" (ngSubmit)="createUser(myForm.value)">
+    <div class="box-body">
+      <div class="form-group" [class.has-error]="unValid(username)">
+        <label class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="请输入您的用户名"
+                 autocomplete="off"
+                 [(ngModel)]="user.username" name="username"
+                 #username="ngModel"
+                 required minlength="6"
+          >
+          <div class="has-error" *ngIf="unValid(username)">
+            <span class="help-block" *ngIf="hasError(username,'required')">用户名必须填写</span>
+            <span class="help-block" *ngIf="hasError(username,'minlength')">最户名最少6位</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 固话 -->
+      <div class="form-group" [class.has-error]="unValid(phone)">
+        <label class="col-sm-2 control-label">固话(不是手机)</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="手机号"
+                 [(ngModel)]="user.phone" name="phone"
+                 #phone="ngModel"
+                 required appPhone
+          >
+          <div class="has-error" *ngIf="unValid(phone)">
+            <span class="help-block" *ngIf="hasError(phone,'required')">固话必须填写</span>
+            <span class="help-block" *ngIf="hasError(phone,'phone')">固话格式错误</span>
+            <div>{{ phone.errors | json }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手机号码 -->
+      <div class="form-group" [class.has-error]="unValid(mobile)">
+        <label class="col-sm-2 control-label">手机号码(mobile)</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="手机号码 13400000001 注意观察异步验证过程中 status:PENDING"
+                 [(ngModel)]="user.mobile" name="mobile"
+                 #mobile="ngModel"
+                 required appMobile appUserMobile appUserMobileAsync appMobileAsync
+          >
+          <p class="help-block">todo : mobileAsync 为 false 时，显示了错误的信息，但是 status 却不是 PENDING</p>
+          <div class="has-error" *ngIf="unValid(mobile)">
+            <span class="help-block" *ngIf="hasError(mobile,'required')">手机号码必须填写</span>
+            <span class="help-block" *ngIf="hasError(mobile,'mobile')">手机号码格式错误</span>
+            <span class="help-block" *ngIf="hasError(mobile,'userMobile')">{{ mobile.errors.userMobile.msg }}</span>
+            <span class="help-block" *ngIf="hasError(mobile,'mobileAsync')">手机号已经被占用</span>
+            <div>errors: {{ mobile.errors | json }}</div>
+            <div>status: {{ mobile.status }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 电子邮件地址 -->
+      <div class="form-group" [class.has-error]="unValid(email)">
+        <label class="col-sm-2 control-label">电子邮箱</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="请输入电子邮箱"
+                 [(ngModel)]="user.email" name="email"
+                 #email="ngModel"
+                 required email
+          >
+          <div class="has-error" *ngIf="unValid(email)">
+            <span class="help-block" *ngIf="hasError(email,'required')">电子邮箱必须填写</span>
+            <span class="help-block" *ngIf="hasError(email,'email')">电子邮箱格式错误</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 层次级的关系-->
+      <!-- 注意：这里绑定的是引用变量绑定的是ngModelGroup-->
+      <div ngModelGroup="passwordInfo" appPassword #passwordInfo="ngModelGroup">
+        <div class="form-group" [class.has-error]="unValid(password)">
+          <label class="col-sm-2 control-label">密码</label>
+
+          <div class="col-sm-10">
+            <input type="password" class="form-control" placeholder="密码"
+                   [(ngModel)]="user.password" name="password"
+                   #password="ngModel"
+                   required minlength="6"
+            >
+            <div class="has-error" *ngIf="unValid(password)">
+              <span class="help-block" *ngIf="hasError(password,'required')">密码必须填写</span>
+              <span class="help-block" *ngIf="hasError(password,'minlength')">密码最小长度为6</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" [class.has-error]="unValid(rePassword)">
+          <label class="col-sm-2 control-label">确认密码</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" placeholder="确认密码"
+                   [(ngModel)]="user.rePassword" name="rePassword"
+                   #rePassword="ngModel"
+                   required
+            >
+            <div class="has-error" *ngIf="unValid(rePassword)">
+              <span class="help-block" *ngIf="hasError(rePassword,'required')">确认密码必须填写</span>
+            </div>
+            <div class="has-error" *ngIf="unValid(passwordInfo)">
+              <span class="help-block" *ngIf="hasError(passwordInfo,'cmp')">密码不一致</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 单选 : 只需要在第一个选项绑定即可 -->
+      <div class="form-group" [class.has-error]="unValid(sex)">
+        <label class="col-sm-2 control-label">性别</label>
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="radio">
+              <label>
+                <input type="radio"
+                       [(ngModel)]="user.sex" name="sex" value="man"
+                       #sex="ngModel"
+                       required
+                >男
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" [(ngModel)]="user.sex" name="sex" value="woman">女
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" [(ngModel)]="user.sex" name="sex" value="">NULL
+              </label>
+            </div>
+            <div class="has-error" *ngIf="unValid(sex)">
+              <span class="help-block" *ngIf="hasError(sex,'required')">必须选择一个性别</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- todo 多选比较麻烦 -->
+      <!-- 可以使用第三方库来处理： https://github.com/pleerock/ngx-select-controls -->
+      <!--[class.has-error]="unValid(habits)"-->
+      <div class="form-group">
+        <label class="col-sm-2 control-label">(多选)爱好</label>
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="checkbox" *ngFor="let habit of habits">
+              <!--[(ngModel)]="user.habits" #habits="ngModel" required-->
+              <label>
+                <input type="checkbox"
+                       name="habits[{{habit.name}}]"
+                       [value]="habit.name"
+                       [(ngModel)]="user.habits[habit.name]"
+                       [checked]="hasCheckedHabit(habit.name)"
+                       (change)="updateCheckedHabit(habit.name,$event)"
+                >{{ habit.text }},{{user.habits[habit.name]}}
+              </label>
+            </div>
+          </div>
+          <!--<div class="has-error" *ngIf="unValid(habits)">-->
+          <!--<span class="help-block" *ngIf="hasError(habits,'required')">你必须选择一个爱好</span>-->
+          <!--</div>-->
+        </div>
+      </div>
+
+      <!-- 单选 -->
+      <div class="form-group" [class.has-error]="unValid(remember)">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"
+                     [(ngModel)]="user.remember" name="remember"
+                     #remember="ngModel"
+                     required
+                     value="1"> 记住我
+            </label>
+          </div>
+          <div class="has-error" *ngIf="unValid(remember)">
+            <span class="help-block" *ngIf="hasError(remember,'required')">你必须记住我</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 列表 -->
+      <div class="form-group" [class.has-error]="unValid(order)">
+        <label class="col-sm-2 control-label">排序</label>
+        <div class="col-sm-10">
+          <select name="order" [(ngModel)]="user.order"
+                  #order="ngModel"
+                  required
+                  class="form-control">
+            <option value="">请选择排序方式</option>
+            <option value="asc">正序</option>
+            <option value="desc">倒序</option>
+          </select>
+          <div class="has-error" *ngIf="unValid(order)">
+            <span class="help-block" *ngIf="hasError(order,'required')">你必须选择一种排序方式</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="button" class="btn btn-default">取消</button>
+      <button type="submit" class="btn btn-info pull-right">保存</button>
+    </div>
+    <!-- /.box-footer -->
+  </form>
+  <div>表单值: {{ myForm.value | json }}</div>
+  <h5>单项:用户名</h5>
+  <div>值: {{ username.value }}；验证: {{ username.valid }}；状态: {{ username.status }}</div>
+</div>
+<!-- /.box -->

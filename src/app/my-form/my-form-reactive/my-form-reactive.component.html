@@ -1,0 +1,228 @@
+<div class="help-block">
+  <div>由 FormControl, FormGroup, FormArray 组成</div>
+  <div>目录: src/app/my-form/my-form-reactive</div>
+</div>
+
+<!-- Horizontal Form -->
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">响应式表单</h3>
+  </div>
+  <!-- /.box-header -->
+  <!-- form start -->
+
+  <!--
+  响应式表单的特点：
+  1. 不能使用模板引用变量，即 #myForm 这样的语法
+  2. 只有 formGroup 需要使用属性绑定
+  -->
+  <form class="form-horizontal" novalidate [formGroup]="userForm" (submit)="createUser()">
+    <div class="box-body">
+
+      <div class="form-group" [class.has-error]="unValid('username')">
+        <label class="col-sm-2 control-label">用户名(text)</label>
+        <div class="col-sm-10">
+          <!-- 以 Name 结尾的指令，不需要 name，不需要使用属性绑定语法 -->
+          <input type="text" class="form-control"
+                 placeholder="请输入您的用户名"
+                 formControlName="username"
+
+          >
+          <div class="has-error" *ngIf="unValid('username')">
+            <span class="help-block" *ngIf="hasError('required','username')">用户名必须填写</span>
+            <span class="help-block" *ngIf="hasError('minlength','username')">最户名最少6位</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" [class.has-error]="unValid('phone')">
+        <label class="col-sm-2 control-label">固话(phone)</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="固话"
+                 formControlName="phone"
+          >
+          <div class="has-error" *ngIf="unValid('phone')">
+            <span class="help-block" *ngIf="hasError('required','phone')">固话必须填写</span>
+            <span class="help-block" *ngIf="hasError('phone','phone')">固话格式错误</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" [class.has-error]="unValid('mobile')">
+        <label class="col-sm-2 control-label">手机号码(mobile)</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="手机号码 13400000000 注意观察异步验证过程中 status:PENDING"
+                 formControlName="mobile"
+          >
+          <div class="has-error" *ngIf="unValid('mobile')">
+            <span class="help-block" *ngIf="hasError('required','mobile')">手机号码必须填写</span>
+            <span class="help-block" *ngIf="hasError('mobile','mobile')">手机号码格式错误</span>
+            <span class="help-block" *ngIf="hasError('mobileAsync','mobile')">手机号已经被占用</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" [class.has-error]="unValid('email')">
+        <label class="col-sm-2 control-label">电子邮箱(email)</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="请输入电子邮箱"
+                 formControlName="email"
+          >
+          <div class="has-error" *ngIf="unValid('email')">
+            <span class="help-block" *ngIf="hasError('required','email')">电子邮箱必须填写</span>
+            <span class="help-block" *ngIf="hasError('email','email')">电子邮箱格式错误</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 层次级的关系 -->
+      <div formGroupName="passwordInfo">
+        <div class="form-group" [class.has-error]="unValid('passwordInfo.password')">
+          <label class="col-sm-2 control-label">密码(组)</label>
+
+          <div class="col-sm-10">
+            <input type="password" class="form-control" placeholder="密码"
+                   formControlName="password"
+            >
+            <div class="has-error" *ngIf="unValid('passwordInfo.password')">
+              <span class="help-block" *ngIf="hasError('required','passwordInfo.password')">密码必须填写</span>
+              <span class="help-block" *ngIf="hasError('minlength','passwordInfo.password')">密码最小长度为6</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" [class.has-error]="unValid('passwordInfo.rePassword')">
+          <label class="col-sm-2 control-label">确认密码</label>
+
+          <div class="col-sm-10">
+            <input type="password" class="form-control" placeholder="确认密码"
+                   formControlName="rePassword"
+            >
+            <div class="has-error" *ngIf="unValid('passwordInfo.rePassword')">
+              <span class="help-block" *ngIf="hasError('required','passwordInfo.rePassword')">确认密码必须填写</span>
+            </div>
+            <div class="has-error" *ngIf="unValid('passwordInfo')">
+              <span class="help-block" *ngIf="hasError('cmp','passwordInfo')">密码不一致</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 单选 -->
+      <div class="form-group" [class.has-error]="unValid('sex')">
+        <label class="col-sm-2 control-label">性别(radio)</label>
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="radio">
+              <label>
+                <input type="radio" formControlName="sex" value="man">男
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" formControlName="sex" value="woman">女
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" formControlName="sex" value="">NULL
+              </label>
+            </div>
+            <div class="has-error" *ngIf="unValid('sex')">
+              <span class="help-block" *ngIf="hasError('required','sex')">必须选择一个性别</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" formArrayName="habits">
+        <!-- 多选比较麻烦 -->
+        <label class="col-sm-2 control-label">爱好(多选)</label>
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="checkbox" *ngFor="let habit of habits.controls;let i = index">
+              <label>
+                <input type="checkbox"
+                       [formControl]="habit"
+                       [checked]="habit.value"
+                > {{ habitsOptions[i].text }}
+              </label>
+            </div>
+          </div>
+          <!--<div class="has-error" *ngIf="unValid('habits')">-->
+            <!--<span class="help-block" *ngIf="hasError('required','habits')">必须选择一个爱好</span>-->
+          <!--</div>-->
+        </div>
+      </div>
+      <div class="form-group" [class.has-error]="unValid('remember')">
+        <label class="col-sm-2 control-label">(单选)</label>
+        <div class="col-sm-10">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"
+                     formControlName="remember"
+              > 协议
+            </label>
+            <div class="has-error" *ngIf="unValid('remember')">
+              <span class="help-block" *ngIf="hasError('required','remember')">你必须同意协议</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" [class.has-error]="unValid('order')">
+        <label class="col-sm-2 control-label">排序(select)</label>
+        <div class="col-sm-10">
+          <select formControlName="order" class="form-control">
+            <option value="">请选择排序方式</option>
+            <option value="asc">正序</option>
+            <option value="desc">倒序</option>
+          </select>
+          <div class="has-error" *ngIf="unValid('order')">
+            <span class="help-block" *ngIf="hasError('required','order')">你必须选择一种排序方式</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" formArrayName="addresses">
+        <label class="col-sm-2 control-label">常用地址(FormArray)</label>
+        <div class="col-sm-10">
+          <div *ngFor="let address of addresses.controls; let i = index;"
+               [formGroupName]="i"
+               class="input-group input-group-sm">
+            <span class="input-group-addon">#{{i+1}}</span>
+            <input type="text" class="form-control" formControlName="street">
+            <span class="input-group-btn">
+               <button type="button" class="btn btn-danger btn-flat"
+                       (click)="deleteAddress(i)"
+               >删除</button>
+            </span>
+          </div>
+          <div>
+            <button class="btn btn-primary btn-xs" (click)="addAddress()">
+              <i class="glyphicon glyphicon-plus"></i> 增加
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="button" class="btn btn-default">取消</button>
+      <button type="submit" class="btn btn-primary pull-right"
+              [disabled]="userForm.invalid">保存
+      </button>
+      <button style="margin: 0 1em;" type="submit" class="btn btn-info pull-right">打印</button>
+      <button type="reset" class="btn btn-danger pull-right" (click)="reset()">重置</button>
+    </div>
+    <!-- /.box-footer -->
+  </form>
+  <div>表单全部值 userForm.value : {{ userForm.value | json }}</div>
+  <div>表单状态 userForm.status : {{ userForm.status}}</div>
+  <hr>
+  <div>单个属性的值 userForm.get('mobile').value : {{ userForm.get('mobile').value }}</div>
+  <div>单个属性状态 userForm.get('mobile').status ：{{ userForm.get('mobile').status }}</div>
+  <div>单个属性验证 userForm.get('mobile').errors : {{ userForm.get('mobile').errors | json }}</div>
+</div>
+
+<!-- /.box -->

@@ -1,0 +1,59 @@
+<h4>内置管道</h4>
+<ol>
+  <li> date:"y/MM/dd hh:mm:ss a zzzz" => {{ birthday | date:"yyyy/MM/dd hh:mm:ss a zzzz"}}</li>
+  <li> 'hello world' | uppercase => {{ 'hello world' | uppercase }}</li>
+  <li> 'Hello World' | lowercase => {{ 'Hello World' | lowercase }}</li>
+
+</ol>
+
+<h4>DecimalPipe - 数字</h4>
+<div class="help-block">
+  <div>number_expression | number [:digitInfo[:locale]]</div>
+  <div>digitInfo => miniIntegerDigits.minFractionDigits-maxFractionDigits</div>
+  <div style="margin-left: 2em;">miniIntegerDigits:整数部分最小保留位数，默认为 1</div>
+  <div style="margin-left: 2em;">minFractionDigits:分数部分最小保留位数，默认为 0</div>
+  <div style="margin-left: 2em;">maxFractionDigits:分数部分最大保留位数, 默认为 3</div>
+  <div><a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" target="_blank">locale</a>
+  </div>
+</div>
+<div>
+  <div>默认 {{e}} => {{e | number}}</div>
+  <div>number:'3.5-5' => {{e | number:'3.5-5'}}</div>
+  <div>number:'3.3-8' => {{e | number:'3.3-8'}}</div>
+</div>
+
+<h4>PercentPipe — 百分比</h4>
+<div class="help-block">
+  <div>number_expression | percent[:digitInfo[:locale]]</div>
+  <div>digitInfo 参考 DecimalPipe</div>
+  <div>locale</div>
+</div>
+<div>
+  <div>默认 {{p}} => {{ p | percent }}</div>
+  <div>percent:'3.3-5' => {{p | percent:'3.3-5'}}</div>
+</div>
+
+<h4>CurrencyPipe - 货币</h4>
+<div class="help-block">
+  <div>number_expression | currency[:currencyCode[:display[:digitInfo[:locale]]]]</div>
+  <div><a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank">currencyCode</a>,货币符号，人民币 CNY，香港 HKD</div>
+  <div>display</div>
+  <div style="margin-left: 2em;">code: 默认为 USD</div>
+  <div style="margin-left: 2em;">symbol: 符号，例如 $</div>
+  <div style="margin-left: 2em;">symbol-narrow: 某些国家有两个符号</div>
+  <div>digitInfo: 参考 DecimalPipe</div>
+  <div>local</div>
+</div>
+
+<div>
+  <ol>
+    <li> 默认 {{ money }} => {{ money | currency }}</li>
+    <li> currency:'CNY': 'symbol':'4.1-4' => {{ money | currency:'CNY': 'symbol':'4.1-4'}}</li>
+    <li> currency:'HKD': 'symbol':'4.1-4' => {{ money | currency:'HKD': 'symbol':'4.1-4'}}</li>
+  </ol>
+</div>
+
+<h4>async - 异步管道</h4>
+
+<h3>自定义的管道</h3>
+<div>{{ money | multiple:3 }} 路径: src/app/my-pipe/my-pipe-index</div>

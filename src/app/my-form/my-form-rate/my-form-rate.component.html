@@ -1,0 +1,9 @@
+<div [style.font-size.px]="18" [style.margin-top.px]="6">
+  <i *ngFor="let rate of rates;let i = index;"
+     class="glyphicon"
+     [ngClass]="{'glyphicon-star':rate,'glyphicon-star-empty':!rate}"
+     (click)="onClickStar(i)"
+  >
+  </i>
+</div>
+
