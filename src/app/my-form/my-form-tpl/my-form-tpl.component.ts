@@ -9,24 +9,10 @@ import {HABITS_OPTIONS, User} from '../user';
 export class MyFormTplComponent implements OnInit {
 
   user: any;
+  habits_options = [];
 
   constructor() {
   }
-
-  // ---------- 多选开始 ------------
-  habits = [];
-
-  // 检查是否选中
-  hasCheckedHabit(name): boolean {
-    return this.user.habits && this.user.habits[name];
-  }
-
-  // 更新选中
-  updateCheckedHabit(name, event) {
-    this.user.habits[name] = event.target.checked;
-  }
-
-  // ---------- 多选结束
 
   // ---------- 表单状态 --------
 
@@ -42,8 +28,11 @@ export class MyFormTplComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User();
+    // 采用对象格式，可读性较好，较检器参考 src/app/my-form/my-form-tpl/directive/habits.directive.ts
     this.user.habits = {pingpong: false, basketball: true, football: false};
-    this.habits = HABITS_OPTIONS;
+    // 注：如果你采用 [false,true,false] 这样的格式，
+    // 那么则需要采用 src/app/my-form/my-form-reactive/my-form-reactive.component.ts 中的 habitsSelectValidator 格式的校验器
+    this.habits_options = HABITS_OPTIONS;
   }
 
   createUser(info: any) {

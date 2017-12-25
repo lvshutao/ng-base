@@ -35,7 +35,18 @@ export class MyFormReactiveComponent implements OnInit, OnChanges {
       // 这个 control 的值，只保存一个 boolean
       return this.fb.control(habit.selected);
     });
-    return this.fb.array(habitsArr);
+    return this.fb.array(habitsArr, this.habitsSelectValidator);
+  }
+  // 较验器
+  habitsSelectValidator(control: FormArray) {
+    let valid = false;
+    control.controls.forEach(ctrl => {
+      if (ctrl.value) {
+        valid = true;
+        return;
+      }
+    });
+    return valid ? null : {length: true};
   }
 
   // -------------- 初始化 FormGroup ---------------

@@ -14,6 +14,7 @@ import {MobileDirective} from './my-form-tpl/directive/mobile.directive';
 import {MobileAsyncDirective} from './my-form-tpl/directive/mobile-async.directive';
 import {UserMobileDirective} from './my-form-tpl/directive/user-mobile.directive';
 import {UserMobileAsyncDirective} from './my-form-tpl/directive/user-mobile-async.directive';
+import {HabitsDirective} from './my-form-tpl/directive/habits.directive';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import {UserMobileAsyncDirective} from './my-form-tpl/directive/user-mobile-asyn
     UserMobileDirective,
     UserMobileAsyncDirective,
     PasswordDirective,
-    PhoneDirective
+    PhoneDirective,
+    HabitsDirective
   ],
   providers: [
     MyTeacherService

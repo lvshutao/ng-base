@@ -156,29 +156,25 @@
         </div>
       </div>
 
-      <!-- todo 多选比较麻烦 -->
-      <!-- 可以使用第三方库来处理： https://github.com/pleerock/ngx-select-controls -->
-      <!--[class.has-error]="unValid(habits)"-->
-      <div class="form-group">
+      <!-- 只能编写自己的较验证器 -->
+      <div class="form-group" ngModelGroup="habits" #habits="ngModelGroup" appHabits
+           [class.has-error]="unValid(habits)">
         <label class="col-sm-2 control-label">(多选)爱好</label>
         <div class="col-sm-10">
           <div class="form-group">
-            <div class="checkbox" *ngFor="let habit of habits">
-              <!--[(ngModel)]="user.habits" #habits="ngModel" required-->
+            <div class="checkbox" *ngFor="let habit of habits_options">
               <label>
                 <input type="checkbox"
-                       name="habits[{{habit.name}}]"
+                       [name]="habit.name"
                        [value]="habit.name"
                        [(ngModel)]="user.habits[habit.name]"
-                       [checked]="hasCheckedHabit(habit.name)"
-                       (change)="updateCheckedHabit(habit.name,$event)"
-                >{{ habit.text }},{{user.habits[habit.name]}}
+                > {{habit.text}}
               </label>
             </div>
+            <div class="has-error" *ngIf="unValid(habits)">
+              <span class="help-block" *ngIf="hasError(habits,'length')">必须选择一个爱好</span>
+            </div>
           </div>
-          <!--<div class="has-error" *ngIf="unValid(habits)">-->
-          <!--<span class="help-block" *ngIf="hasError(habits,'required')">你必须选择一个爱好</span>-->
-          <!--</div>-->
         </div>
       </div>
 
@@ -221,12 +217,11 @@
     <!-- /.box-body -->
     <div class="box-footer">
       <button type="button" class="btn btn-default">取消</button>
-      <button type="submit" class="btn btn-info pull-right">保存</button>
+      <button type="submit" class="btn btn-info pull-right" [disabled]="myForm.invalid">保存</button>
     </div>
     <!-- /.box-footer -->
   </form>
-  <div>表单值: {{ myForm.value | json }}</div>
-  <h5>单项:用户名</h5>
-  <div>值: {{ username.value }}；验证: {{ username.valid }}；状态: {{ username.status }}</div>
+  <div><b>表单值</b> : {{ myForm.value | json }}</div>
+  <div><b>用户名</b> => 值: {{ username.value }}；验证: {{ username.valid }}；状态: {{ username.status }}</div>
 </div>
 <!-- /.box -->

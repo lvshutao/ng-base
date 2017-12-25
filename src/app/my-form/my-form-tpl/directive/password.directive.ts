@@ -1,5 +1,5 @@
-import {Directive, OnChanges} from '@angular/core';
-import {AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {Directive} from '@angular/core';
+import {AbstractControl, NG_VALIDATORS, Validator, Validators} from '@angular/forms';
 import {passwordCmpValidator} from '../../validators';
 
 @Directive({
