@@ -1,0 +1,114 @@
+<h4>系统代理设置</h4>
+<div class="help-block">
+  <div>根据 <a href="https://github.com/angular/angular-cli/blob/master/docs/documentation/stories/proxy.md">angular-cli
+    文档</a>, 增加 proxy.conf.json
+  </div>
+  <div>修改 package.json 中的命令 "start": "ng serve --proxy-config proxy.conf.json"</div>
+  <div>记得使用 npm run start 而不是 ng serve 来启动</div>
+</div>
+
+<p class="help-block">angular 4.2.0 以上的 http 接口已经改变，查看<a href="https://angular.io/tutorial/toh-pt6">英文文档</a>，中文文档还没有更新；
+</p>
+
+<div class="box" *ngIf="heroes">
+  <div class="box-header">
+    <div class="box-header">
+      <button (click)="add()" class="btn btn-xs btn-success">
+        <i class="glyphicon glyphicon-plus"></i>
+      </button>
+
+      <button class="btn btn-xs btn-info" (click)="sendWs()">
+        <i class="glyphicon glyphicon-send"></i> socket web
+      </button>
+      <span>web-socket 注意观察右上角的新消息通知</span>
+    </div>
+    <div class="box-tools" style="margin-top: 10px;">
+      <div class="input-group input-group-sm" style="width: 150px;">
+        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body table-responsive no-padding">
+    <table class="table table-hover">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Phone</th>
+        <th>Action</th>
+      </tr>
+      <tr *ngFor="let hero of heroes">
+        <td>{{ hero.id }}</td>
+        <td>{{ hero.name }}</td>
+        <td>{{ hero.age }}</td>
+        <td>{{ hero.phone }}</td>
+        <td>
+          <button class="btn btn-xs btn-primary" (click)="doFind(hero)">
+            <i class="glyphicon glyphicon-edit"></i>
+          </button>
+          <button class="btn btn-xs btn-danger" (click)="doDelete(hero)">
+            <i class="glyphicon glyphicon-remove"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!-- /.box-body -->
+</div>
+
+<div *ngIf="myHero">
+  <!-- Horizontal Form -->
+  <div class="box box-info">
+    <!-- form start -->
+    <form class="form-horizontal" novalidate>
+      <div class="box-body">
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="name"
+                   [(ngModel)]="myHero.name" name="name"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="age" class="col-sm-2 control-label">Age</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="age"
+                   [(ngModel)]="myHero.age" name="age"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="col-sm-2 control-label">Phone</label>
+          <div class="col-sm-10">
+            <select name="phone" [(ngModel)]="myHero.phone"
+                    class="form-control" id="phone">
+              <option value="">请选择</option>
+              <option value="apple">apple</option>
+              <option value="android">android</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-default"
+                (click)="doCancel()"
+        >取消
+        </button>
+        <button type="submit" class="btn btn-info pull-right"
+                (click)="doSave()"
+        >保存
+        </button>
+      </div>
+      <!-- /.box-footer -->
+    </form>
+  </div>
+</div>
