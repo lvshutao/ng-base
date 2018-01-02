@@ -1,0 +1,122 @@
+<div>为了减少压缩包的大小，已经从核心中移除，需要自己安装，并配置并导入
+  `import BrowserAnimationsModule from '@angular/platform-browser/animations'`
+</div>
+<h4>State 和 Transition</h4>
+<div>
+  <div>动画其实就是从一个状态过渡到另一个状态，状态本身包含形状、颜色、大小等等</div>
+  <div>state 定义状态</div>
+  <div>transition 定义如何过滤，主要是通过 Animate 函数进行控制</div>
+  <h5>Animate 函数</h5>
+  <div>
+    规定了具体怎样过渡，比如时间、过渡的速度等；支持多种重载方式:字符串、数字等……
+  </div>
+</div>
+
+<h4>步骤</h4>
+<ol>
+  <li>在组件中使用 trigger 定义动画的名称</li>
+  <li>使用 state 定义动画的状态</li>
+  <li>使用 transition 定义从状态A 到 状态B 时，animate 应该如何过滤</li>
+</ol>
+<pre>
+// 通常会把动画提取出来，如 src/app/animations/动画名称.ts
+import {{ '{' }} trigger, state, style, transition, animate {{ '}' }} from '@angular/animations';
+export const 动画名称Animate =   trigger('动画名称',[
+    state('状态A', style({{ '{' }}
+      ... 状态A 的样式描述
+    {{ '}' }})),
+    state('状态B', style({{ '{' }}
+      ... 状态B 的样式描述
+    {{ '}' }})),
+    transition('状态A => 状态B', animate('时间 速度'),
+    transition('状态B => 状态A', animate('100ms ease-out')
+  ]
+// 然后再将其导入到组件中
+@Component.animations:[ 动画名称Animate ]
+// 在模析中使用 [@动画名称] 将它绑定到一个或多个元素上(部分绑定)
+[@动画名称]="初始的状态"
+</pre>
+<div>注：在动画的绑定上，如果你是引入另一个动画，相把它绑定到当前的组件上(整个绑定)，那么可以通过以下的方式，因此你还需要使用到 <span style="color: red;">HostListener, HostBinding</span></div>
+<pre>
+import {{'{'}} HostBinding, HostListener {{'}' }} from '@angular/core';
+import {{'{'}} cardAnim {{'}' }} from '../../../animates/card.anim';
+
+@Component({{'{'}}
+  animations: [
+    cardAnim
+  ]
+{{'}' }})
+export class ... {{'{'}}
+  // 相当于在当前组件上添加 [@card]="cardState"
+  @HostBinding('@card') cardState = "out";
+  // 相当于在当前组件上添加 (mouseenter)="onMuuseEnter()"
+  @HostListener('mouseenter') onMuuseEnter() {{'{'}}
+    this.cardState = "hover";
+  {{'}' }}
+  // 相当于在当前组件上添加 (mouseleave)="onMuuseLeave()"
+  @HostListener('mouseleave') onMuuseLeave() {{'{'}}
+    this.cardState = "out";
+  {{'}' }}
+{{'}' }}
+</pre>
+<div>
+  <div>
+    <div style="width: 100px;height: 50px;border: 1px solid red;margin: 1em;"
+         [@myAnimations]="state">My Animations
+    </div>
+  </div>
+
+  <div>
+    <button (click)="toggleState()">切换动画</button>
+  </div>
+</div>
+
+<h4>技巧</h4>
+<div>
+  <h5>状态名称</h5>
+  <div>* : 通配符，表示任意的状态名称</div>
+  <div>void : 表示元素没有加载到视图上时，用于 进场( void => * ) 或 离场( * => void );
+    <p>进场的省略别名: transition(':enter', [...]); // 相当于 void => *</p>
+    <p>离场的省略别名: transition(':leave', [...]); // 相当于 * => void</p>
+  </div>
+  <h5>状态过渡写法</h5>
+  <div>
+    <div>单向: 状态A =&gt; 状态B;</div>
+    <div>连续: 状态A =&gt; 状态B, 状态B =&gt; 状态C</div>
+    <div>双向: 状态A &lt;=&gt; 状态B</div>
+  </div>
+  <h5>如何过渡</h5>
+  <div>
+    <div>animate('延迟时间 执行时间 效果'), animate('执行时间 效果')</div>
+    <p>时间: 100, '100ms', '0.1s' 都是可以的</p>
+    <p>效果: ease-out, ease-in-out...
+      <a href="http://easings.net/zh-cn" target="_blank">缓存函数速查表</a> 模拟各种效果:失重，皮球……
+    </p>
+    <div>使用 cubic-bezier
+    效果还可以直接使用 <a href="http://cubic-bezier.com/" target="_blank">cubic-bezier</a> 函数，
+      如 animate('.8s cubic-bezier(0.68,-0.55,0.265,1.55)) ，但不是所有浏览器都支持。
+      可以使用下面的关键帧动画来替代。
+    </div>
+    <div>基于关键帧的多阶段动画</div>
+    <div>
+<pre>
+// offset 是可选的，默认每个样式的时间 = 总时间/style.length
+animate(总时间, keyframes([
+  style({{'{'}} style 样式 {{'}'}}, offset:0),
+  ...
+  style({{'{'}} style 样式 {{'}'}}, offset:1),
+]))
+</pre>
+    </div>
+  </div>
+</div>
+
+<h3>高阶动画</h3>
+<div>动画只是辅助手段，不要过多，否则会适得其反</div>
+
+<h4>动画组</h4>
+<h4>动画回调</h4>
+<h4>Query & Stagger</h4>
+<div>Query 用于父节点寻找子节点，Stagger 指定有多个满足 Query 的元素时，每个动画之间的间隔; 具体的示例查看 angular/ng-material/src/app/animates/list.anim.ts</div>
+<h4>路由动画</h4>
+<div>需要在 host 元数据中指定触发器</div>

@@ -69,7 +69,7 @@ export class MyHttpIndexComponent implements OnInit {
   sendWs() {
     this.ws.send(JSON.stringify({
       type: 'notify',
-      id: parseInt(Math.random() * 1000),
+      id: Math.random() * 1000,
       message: 'Hello World:' + Date.now()
     }));
   }

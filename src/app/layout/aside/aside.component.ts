@@ -19,6 +19,7 @@ export class AsideComponent implements OnInit {
     new Menu(4, '管道', 'my-pipe', 'text-yellow'),
     new Menu(5, 'rxjs', 'my-rxjs', 'text-yellow'),
     new Menu(6, 'http', 'my-http', 'text-yellow'),
+    new Menu(7, 'Animation', 'my-animation', 'text-red'),
   ];
 
   constructor(private router: Router, private pageInfo: PageInfoService, private routeInfo: ActivatedRoute) {
